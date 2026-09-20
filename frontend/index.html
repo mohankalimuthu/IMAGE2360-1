@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        IMG2360 - AI Background Remover
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>
+            IMG2360
+        </h1>
+
+        <p>
+            AI-Powered Background Remover
+        </p>
+
+    </header>
+
+
+    <main>
+
+        <!-- Upload Area -->
+
+        <section
+            class="upload-section"
+            id="uploadSection"
+        >
+
+            <div class="upload-icon">
+                ↑
+            </div>
+
+            <h2>
+                Upload your image
+            </h2>
+
+            <p>
+                JPG, JPEG, PNG or WEBP
+            </p>
+
+            <label
+                for="imageInput"
+                class="upload-button"
+            >
+                Choose Image
+            </label>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept=".jpg,.jpeg,.png,.webp"
+                hidden
+            >
+
+        </section>
+
+
+        <!-- Preview -->
+
+        <section
+            class="preview-section hidden"
+            id="previewSection"
+        >
+
+            <div class="image-card">
+
+                <h3>
+                    Original
+                </h3>
+
+                <img
+                    id="originalImage"
+                    alt="Original image"
+                >
+
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="image-card">
+
+                <h3>
+                    Background Removed
+                </h3>
+
+                <div class="checkerboard">
+
+                    <img
+                        id="resultImage"
+                        alt="Result image"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Action -->
+
+        <section
+            class="action-section"
+        >
+
+            <button
+                id="removeButton"
+                class="remove-button"
+                disabled
+            >
+                Remove Background
+            </button>
+
+
+            <button
+                id="downloadButton"
+                class="download-button hidden"
+            >
+                Download PNG
+            </button>
+
+        </section>
+
+
+        <!-- Loading -->
+
+        <div
+            id="loading"
+            class="loading hidden"
+        >
+
+            <div class="spinner"></div>
+
+            <p>
+                AI is removing the background...
+            </p>
+
+            <span>
+                Please wait
+            </span>
+
+        </div>
+
+
+        <!-- Message -->
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            IMG2360 • AI Image Processing
+        </p>
+
+    </footer>
+
+</div>
+
+
+<script
+    src="script.js"
+></script>
+
+</body>
+
+</html>

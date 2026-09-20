@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>img2360 - 3D Car Generator</title>
+
+    <!-- Import Three.js and necessary plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        body { font-family: system-ui, sans-serif; background-color: #1a1a1a; color: white; text-align: center; padding: 2rem; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .upload-box { border: 2px dashed #4CAF50; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; }
+        button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; margin-top: 1rem; }
+        button:hover { background-color: #45a049; }
+        #viewer-container { width: 100%; height: 500px; background-color: #2a2a2a; border-radius: 10px; display: none; margin-top: 2rem; overflow: hidden; }
+        #loading { display: none; color: #4CAF50; margin-top: 1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>img2360</h1>
+        <p>Upload a 2D image of a car and generate a 360-degree 3D model.</p>
+
+        <div class="upload-box">
+            <form id="uploadForm">
+                <input type="file" id="carInput" accept="image/*" required>
+                <br>
+                <button type="submit">Generate 3D Model</button>
+            </form>
+            <div id="loading">🚀 Sending to Cloud GPU... This takes about 10-20 seconds.</div>
+        </div>
+
+        <!-- The new Three.js Canvas Container -->
+        <div id="viewer-container"></div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('carInput');
+            const loading = document.getElementById('loading');
+            const viewerContainer = document.getElementById('viewer-container');
+
+            if (fileInput.files.length === 0) return;
+
+            // UI Updates
+            loading.style.display = 'block';
+            viewerContainer.style.display = 'none';
+            viewerContainer.innerHTML = ''; // Clear previous models
+
+            const formData = new FormData();
+            formData.append('car_image', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.model_url) {
+                    viewerContainer.style.display = 'block';
+                    load3DModel(data.model_url);
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (err) {
+                alert("Connection failed.");
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        // --- Three.js Logic for 360 Viewing ---
+        function load3DModel(objUrl) {
+            const container = document.getElementById('viewer-container');
+
+            // 1. Setup Scene, Camera, and Renderer
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.set(0, 1.5, 4);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // 2. Add Lighting so the car isn't dark
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 10);
+            scene.add(directionalLight);
+
+            // 3. Add Orbit Controls (Mouse Dragging)
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.autoRotate = true; // Slowly spins the car automatically
+
+            // 4. Load the .obj file from Flask
+            const loader = new THREE.OBJLoader();
+            loader.load(
+                objUrl,
+                function (object) {
+                    // Center the model dynamically
+                    const box = new THREE.Box3().setFromObject(object);
+                    const center = box.getCenter(new THREE.Vector3());
+                    object.position.sub(center); // Centers the car
+
+                    scene.add(object);
+                },
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('An error happened', error);
+                }
+            );
+
+            // 5. Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
