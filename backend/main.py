@@ -17,11 +17,6 @@ from fastapi.responses import FileResponse
 
 from bg_remover import BackgroundRemover
 
-
-# ==================================================
-# APP
-# ==================================================
-
 app = FastAPI(
     title="IMG2360 AI Car Background Remover",
     description=(
@@ -49,11 +44,6 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-
-# ==================================================
-# DIRECTORIES
-# ==================================================
-
 UPLOAD_DIR = Path(
     "uploads"
 )
@@ -71,10 +61,6 @@ OUTPUT_DIR.mkdir(
     exist_ok=True
 )
 
-
-# ==================================================
-# BACKGROUND REMOVER
-# ==================================================
 
 try:
 
@@ -94,11 +80,6 @@ except Exception as error:
         f"{error}"
     )
 
-
-# ==================================================
-# HOME
-# ==================================================
-
 @app.get("/")
 def home():
 
@@ -117,11 +98,6 @@ def home():
             "AI Car Background Remover API is running"
     }
 
-
-# ==================================================
-# HEALTH
-# ==================================================
-
 @app.get("/health")
 def health():
 
@@ -134,11 +110,6 @@ def health():
             remover is not None
     }
 
-
-# ==================================================
-# REMOVE BACKGROUND
-# ==================================================
-
 @app.post(
     "/remove-background"
 )
@@ -147,10 +118,6 @@ async def remove_background(
     file: UploadFile =
         File(...)
 ):
-
-    # ----------------------------------------------
-    # Check service
-    # ----------------------------------------------
 
     if remover is None:
 
@@ -164,10 +131,6 @@ async def remove_background(
             )
         )
 
-
-    # ----------------------------------------------
-    # Check file type
-    # ----------------------------------------------
 
     allowed_types = {
 
@@ -202,11 +165,6 @@ async def remove_background(
                 "Unsupported image format."
             )
         )
-
-
-    # ----------------------------------------------
-    # Generate unique ID
-    # ----------------------------------------------
 
     file_id = uuid.uuid4().hex
 
@@ -247,9 +205,6 @@ async def remove_background(
 
     try:
 
-        # ------------------------------------------
-        # Save uploaded image
-        # ------------------------------------------
 
         with open(
             input_path,
@@ -261,10 +216,6 @@ async def remove_background(
                 buffer
             )
 
-
-        # ------------------------------------------
-        # AI background removal
-        # ------------------------------------------
 
         result = (
             remover.remove_background(
@@ -360,10 +311,6 @@ async def remove_background(
 
     finally:
 
-        # ------------------------------------------
-        # Delete original upload
-        # ------------------------------------------
-
         if input_path.exists():
 
             try:
@@ -373,11 +320,6 @@ async def remove_background(
             except Exception:
 
                 pass
-
-
-# ==================================================
-# DOWNLOAD
-# ==================================================
 
 @app.get(
     "/download/{filename}"
@@ -410,11 +352,6 @@ def download_file(
 
         filename=filename
     )
-
-
-# ==================================================
-# RUN
-# ==================================================
 
 if __name__ == "__main__":
 

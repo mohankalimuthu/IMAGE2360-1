@@ -38,11 +38,6 @@ class BackgroundRemover:
 
         self.api_client = WithoutBGClient()
 
-
-    # -----------------------------------------
-    # Validate file
-    # -----------------------------------------
-
     def validate_file(
         self,
         file_path: str
@@ -53,8 +48,6 @@ class BackgroundRemover:
         )
 
 
-        # Extension
-
         if (
             path.suffix.lower()
             not in ALLOWED_EXTENSIONS
@@ -64,8 +57,6 @@ class BackgroundRemover:
                 "Unsupported file type."
             )
 
-
-        # Size
 
         file_size_mb = (
             path.stat().st_size
@@ -83,9 +74,6 @@ class BackgroundRemover:
                 f"{MAX_FILE_SIZE_MB} MB."
             )
 
-
-        # Image validation
-
         try:
 
             with Image.open(
@@ -101,10 +89,6 @@ class BackgroundRemover:
                 "Invalid or corrupted image."
             )
 
-
-    # -----------------------------------------
-    # Remove background
-    # -----------------------------------------
 
     def remove_background(
         self,

@@ -87,7 +87,6 @@ main {
 }
 
 
-/* Upload */
 
 .upload-section {
 
@@ -168,9 +167,6 @@ main {
     font-weight:
         bold;
 }
-
-
-/* Preview */
 
 .preview-section {
 
@@ -352,9 +348,6 @@ main {
         white;
 }
 
-
-/* Loading */
-
 .loading {
 
     text-align:
@@ -402,10 +395,6 @@ main {
             rotate(360deg);
     }
 }
-
-
-/* Message */
-
 .message {
 
     text-align:
@@ -418,17 +407,11 @@ main {
         bold;
 }
 
-
-/* Utility */
-
 .hidden {
 
     display:
         none !important;
 }
-
-
-/* Footer */
 
 footer {
 
@@ -441,9 +424,6 @@ footer {
     color:
         #6b7280;
 }
-
-
-/* Mobile */
 
 @media (
     max-width: 768px

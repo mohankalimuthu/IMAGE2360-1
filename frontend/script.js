@@ -1,9 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
-
-
-// --------------------------------------------------
-// Elements
-// --------------------------------------------------
+const API_URL = "https://image2360-1-ai.onrender.com";
 
 const imageInput =
     document.getElementById("imageInput");
@@ -32,19 +27,9 @@ const loading =
 const message =
     document.getElementById("message");
 
-
-// --------------------------------------------------
-// Selected file
-// --------------------------------------------------
-
 let selectedFile = null;
 
 let resultURL = null;
-
-
-// --------------------------------------------------
-// Image selection
-// --------------------------------------------------
 
 imageInput.addEventListener(
     "change",
@@ -59,8 +44,6 @@ imageInput.addEventListener(
             return;
         }
 
-
-        // Validate type
 
         const allowedTypes = [
             "image/jpeg",
@@ -83,9 +66,6 @@ imageInput.addEventListener(
             return;
         }
 
-
-        // Validate size
-
         const maxSize =
             10 * 1024 * 1024;
 
@@ -105,9 +85,6 @@ imageInput.addEventListener(
 
         selectedFile =
             file;
-
-
-        // Show original image
 
         const imageURL =
             URL.createObjectURL(file);
@@ -143,11 +120,6 @@ imageInput.addEventListener(
     }
 );
 
-
-// --------------------------------------------------
-// Remove background
-// --------------------------------------------------
-
 removeButton.addEventListener(
     "click",
     async function () {
@@ -172,8 +144,6 @@ removeButton.addEventListener(
             selectedFile
         );
 
-
-        // UI state
 
         removeButton.disabled =
             true;
@@ -212,9 +182,6 @@ removeButton.addEventListener(
                     "Background removal failed."
                 );
             }
-
-
-            // Result URL
 
             resultURL =
                 `${API_URL}${data.download_url}`;
@@ -261,11 +228,6 @@ removeButton.addEventListener(
     }
 );
 
-
-// --------------------------------------------------
-// Download
-// --------------------------------------------------
-
 downloadButton.addEventListener(
     "click",
     function () {
@@ -301,11 +263,6 @@ downloadButton.addEventListener(
 
     }
 );
-
-
-// --------------------------------------------------
-// Message
-// --------------------------------------------------
 
 function showMessage(
     text,

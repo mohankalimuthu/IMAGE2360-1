@@ -49,12 +49,10 @@ class WithoutBGClient:
 
                     data={
 
-                        # No artificial shadow
                         "shadow_type":
                             "none",
 
-                        # Improve transparent
-                        # car windows
+
                         "reconstruct_windows":
                             "true"
                     },
@@ -76,10 +74,6 @@ class WithoutBGClient:
                 f"WithoutBG connection error: {error}"
             )
 
-
-        # -----------------------------------------
-        # API Error Handling
-        # -----------------------------------------
 
         if response.status_code != 200:
 
@@ -134,10 +128,6 @@ class WithoutBGClient:
                     f"{response.text}"
                 )
 
-
-        # -----------------------------------------
-        # Save PNG
-        # -----------------------------------------
 
         with open(
             output_path,
