@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # --- CONFIGURATION ---
 COLAB_API_URL = "https://1901bf67534673d63a.gradio.live"  # <-- Paste here
-MONGO_URI = "mongodb+srv://mohankalimuthu2004_db_user:2IyrWggMKRoOtLFb@habitiqrag.jplmfdn.mongodb.net/?appName=HabitIQRag"  # <-- Paste here
+MONGO_URI = "mango"  # <-- Paste here
 
 # Database Setup
 client = MongoClient(MONGO_URI)
